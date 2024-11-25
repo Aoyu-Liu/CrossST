@@ -237,6 +237,7 @@ class CrossST_fine(nn.Module):
         self.input_dim = input_dim
         self.output_len = output_len
         self.head = 1
+        pre_d_model = 256
         
         self.pre_patch_embedding = pre_model.patch_embedding
         self.pre_tmodule = pre_model.tmodule
@@ -248,47 +249,44 @@ class CrossST_fine(nn.Module):
             patch = 1 
         elif input_len==288:
             patch = 12
-
-        fine_d_model = 32
-
+        
         self.patch_embedding = PatchEmbedding(
-            fine_d_model, patch_len=patch, stride=patch,  his=input_len)
+            d_model, patch_len=patch, stride=patch,  his=input_len)
 
-        self.tmodule = TModule(input_dim, fine_d_model, input_len, self.input_len//patch)
+        self.tmodule = TModule(input_dim, d_model, input_len, self.input_len//patch)
 
         self.smodule = SModule(
-            d_model=fine_d_model,
+            d_model=d_model,
             num_nodes = num_nodes,
             head=self.head,
             seq_length=1,
             dropout=dropout,
         )
 
-        self.fc_t = nn.Sequential(nn.Conv2d(fine_d_model, d_model, kernel_size=(1,1), stride=(1,1)),
+        self.fc_t = nn.Sequential(nn.Conv2d(d_model, pre_d_model, kernel_size=(1,1), stride=(1,1)),
                                     nn.ReLU(),
                                     nn.Dropout(dropout))
 
-        self.fc_s = nn.Sequential(nn.Conv2d(fine_d_model, d_model, kernel_size=(1,1), stride=(1,1)),
+        self.fc_s = nn.Sequential(nn.Conv2d(d_model, pre_d_model, kernel_size=(1,1), stride=(1,1)),
                                     nn.ReLU(),
                                     nn.Dropout(dropout))
         
-        self.filter_t = nn.Parameter(torch.ones([d_model, num_nodes, 1]))
-        self.bias_t = nn.Parameter(torch.zeros([d_model, num_nodes, 1]))
+        self.filter_t = nn.Parameter(torch.ones([pre_d_model, num_nodes, 1]))
+        self.bias_t = nn.Parameter(torch.zeros([pre_d_model, num_nodes, 1]))
 
-        self.filter_s = nn.Parameter(torch.ones([d_model, num_nodes, 1]))
-        self.bias_s = nn.Parameter(torch.zeros([d_model, num_nodes, 1]))
+        self.filter_s = nn.Parameter(torch.ones([pre_d_model, num_nodes, 1]))
+        self.bias_s = nn.Parameter(torch.zeros([pre_d_model, num_nodes, 1]))
 
-        self.mlp = MLP(d_model*2, d_model*2)    
+        self.mlp = MLP(pre_d_model*2, pre_d_model*2)    
 
         self.predictor = nn.Conv2d(
-            d_model*2, self.output_len, kernel_size=(1, 1)
+            pre_d_model*2, self.output_len, kernel_size=(1, 1)
         )
 
     def param_num(self):
         return sum([param.nelement() for param in self.parameters()])
 
     def forward(self, input):
-        
         _, time_steps, _, _ = input.size()
         
         with torch.no_grad():
