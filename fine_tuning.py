@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--device", type=str, default="cuda:1", help="")
 parser.add_argument("--data", type=str, default="CAD5_10", help="data path")
 parser.add_argument("--input_dim", type=int, default=3, help="input_dim")
-parser.add_argument("--d_model", type=int, default=256, help="number of nodes")
+parser.add_argument("--d_model", type=int, default=32, help="number of nodes")
 parser.add_argument("--num_nodes", type=int, default=170, help="number of nodes")
 parser.add_argument("--input_len", type=int, default=12, help="input_len")
 parser.add_argument("--output_len", type=int, default=12, help="out_len")
@@ -73,7 +73,7 @@ class trainer:
         print(pretrained_weights_path)
 
         self.model_p = model_p(
-            device, input_dim, d_model, input_len, output_len, dropout, "fine_tuning"
+            device, input_dim, 256, input_len, output_len, dropout, "fine_tuning"
         )
         self.model_p.to(device)
         
