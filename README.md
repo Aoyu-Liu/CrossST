@@ -11,8 +11,8 @@ It's easy to run! Here are some examples, and you can customize the model settin
 nohup python -u pre_train.py --d_model 256 > pre_train.log &
 ```
 ### Fine-Tuning
+If you want to perform fine-tuning on CA-D5:
 ```
-If you want to perform fine-tuning on CA-D5
 nohup python -u fine_tuning.py --data CAD5 --d_model 64 > fine_tuning.log &
 ```
 
