@@ -255,7 +255,6 @@ class CrossST_pre(nn.Module):
         h = self.patch_embedding(x)
         h_t = self.tmodule(h)
         h_s = self.smodule(h_t)
-        y = self.predictor(h_s)
         if self.mode == "pre-train":
             y = self.predictor(h_s)
             y = y[:, :time_steps, :, :]
