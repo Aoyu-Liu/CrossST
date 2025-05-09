@@ -42,5 +42,5 @@ nohup python -u fine_tuning.py --data CAD5_10 --d_model 32 --device cuda:0 > fin
 
 # 🔗 Acknowledgement
 We greatly appreciate the following GitHub repositories for their valuable code, data, and contributions.
-- [EAC](https://github.com/liuxu77/LargeST)
+- [LargeST](https://github.com/liuxu77/LargeST)
 - [BasicTS](https://github.com/GestaltCogTeam/BasicTS)
