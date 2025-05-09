@@ -1,3 +1,9 @@
+<div align="center">
+  <!-- <h1><b> CrossST </b></h1> -->
+  <!-- <h2><b> CrossST </b></h2> -->
+  <h2><b> ✨(ICDE'25) CrossST: An Efficient Pre-Training Framework for Cross-District Pattern Generalization in Urban Spatio-Temporal Forecasting </b></h2>
+</div>
+
 # CrossST
 CrossST: An Efficient Pre-Training Framework for Cross-District Pattern Generalization in Urban Spatio-Temporal Forecasting
 
